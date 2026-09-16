@@ -1,7 +1,6 @@
 <?php
 /**
  * Plugin Name:       Codarx Products
- * Plugin URI:        https://codarx.com
  * Description:       Custom Product post type with categories, pricing, and stock management.
  * Version:           1.0.0
  * Requires at least: 6.0
