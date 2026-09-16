@@ -15,6 +15,9 @@ wordpress/wp-content/plugins/akismet/
 wordpress/wp-content/plugins/hello.php
 wordpress/wp-content/themes/twenty*/
 
+# Design reference (not part of the repo)
+Codarx UI/
+
 # OS / Editor
 .DS_Store
 Thumbs.db
