@@ -1,0 +1,22 @@
+# Environment variables
+.env
+frontend/.env.local
+
+# Node
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# WordPress - only keep our own plugin, not the others
+wordpress/wp-content/uploads/
+wordpress/wp-content/upgrade/
+wordpress/wp-content/cache/
+wordpress/wp-content/plugins/akismet/
+wordpress/wp-content/plugins/hello.php
+wordpress/wp-content/themes/twenty*/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
