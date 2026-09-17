@@ -47,7 +47,7 @@ export default function Header() {
           </Suspense>
         </div>
 
-        <div className="shrink-0">
+        <div className="hidden shrink-0 lg:block">
           <a
             href="mailto:contact@nexusb2b.com"
             className="inline-flex items-center justify-center rounded-full bg-brand px-4 py-2.5 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-brand-hover sm:px-5"
