@@ -97,11 +97,11 @@ class Codarx_Products_Product_Query {
 			$args['meta_query'] = $meta_query;
 		}
 
-		$orderby = isset( $params['orderby'] ) ? sanitize_key( (string) $params['orderby'] ) : '';
-		$order   = isset( $params['order'] ) ? strtoupper( sanitize_key( (string) $params['order'] ) ) : 'ASC';
+		$orderby = isset( $params['orderby'] ) ? sanitize_key( (string) $params['orderby'] ) : 'date';
+		$order   = isset( $params['order'] ) ? strtoupper( sanitize_key( (string) $params['order'] ) ) : '';
 
 		if ( ! in_array( $order, array( 'ASC', 'DESC' ), true ) ) {
-			$order = 'ASC';
+			$order = 'price' === $orderby ? 'ASC' : 'DESC';
 		}
 
 		if ( 'price' === $orderby ) {
@@ -110,7 +110,7 @@ class Codarx_Products_Product_Query {
 			$args['order']    = $order;
 		} else {
 			$args['orderby'] = 'date';
-			$args['order']   = 'DESC';
+			$args['order']   = $order;
 		}
 
 		return $args;
@@ -142,40 +142,65 @@ class Codarx_Products_Product_Query {
 	 * @return array<int, array<string, mixed>>
 	 */
 	private function build_meta_query( array $params ) {
-		if ( ! isset( $params['available'] ) || '' === $params['available'] ) {
-			return array();
-		}
+		$meta_query = array();
 
-		$available = filter_var( $params['available'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
+		if ( isset( $params['available'] ) && '' !== $params['available'] ) {
+			$available = filter_var( $params['available'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
 
-		if ( null === $available ) {
-			return array();
-		}
-
-		if ( $available ) {
-			return array(
-				array(
+			if ( true === $available ) {
+				$meta_query[] = array(
 					'key'     => Codarx_Products_Sanitize::META_STOCK,
-					'value'   => 1,
-					'compare' => '=',
+					'value'   => 0,
+					'compare' => '>',
 					'type'    => 'NUMERIC',
-				),
+				);
+			} elseif ( false === $available ) {
+				$meta_query[] = array(
+					'relation' => 'OR',
+					array(
+						'key'     => Codarx_Products_Sanitize::META_STOCK,
+						'value'   => 0,
+						'compare' => '<=',
+						'type'    => 'NUMERIC',
+					),
+					array(
+						'key'     => Codarx_Products_Sanitize::META_STOCK,
+						'compare' => 'NOT EXISTS',
+					),
+				);
+			}
+		}
+
+		$min_price = isset( $params['min_price'] ) && is_numeric( $params['min_price'] )
+			? (float) $params['min_price']
+			: null;
+		$max_price = isset( $params['max_price'] ) && is_numeric( $params['max_price'] )
+			? (float) $params['max_price']
+			: null;
+
+		if ( null !== $min_price ) {
+			$meta_query[] = array(
+				'key'     => Codarx_Products_Sanitize::META_PRICE,
+				'value'   => $min_price,
+				'compare' => '>=',
+				'type'    => 'NUMERIC',
 			);
 		}
 
-		return array(
-			'relation' => 'OR',
-			array(
-				'key'     => Codarx_Products_Sanitize::META_STOCK,
-				'value'   => 0,
-				'compare' => '=',
+		if ( null !== $max_price ) {
+			$meta_query[] = array(
+				'key'     => Codarx_Products_Sanitize::META_PRICE,
+				'value'   => $max_price,
+				'compare' => '<=',
 				'type'    => 'NUMERIC',
-			),
-			array(
-				'key'     => Codarx_Products_Sanitize::META_STOCK,
-				'compare' => 'NOT EXISTS',
-			),
-		);
+			);
+		}
+
+		if ( count( $meta_query ) > 1 ) {
+			$meta_query['relation'] = 'AND';
+		}
+
+		return $meta_query;
 	}
 
 	/**

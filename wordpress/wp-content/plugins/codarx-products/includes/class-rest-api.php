@@ -126,16 +126,27 @@ class Codarx_Products_REST_API implements Codarx_Products_Registrable {
 				'description' => __( 'Filter by stock availability (true/false).', 'codarx-products' ),
 				'type'        => 'boolean',
 			),
+			'min_price' => array(
+				'description'       => __( 'Minimum product price.', 'codarx-products' ),
+				'type'              => 'number',
+				'sanitize_callback' => array( $this, 'sanitize_price_param' ),
+			),
+			'max_price' => array(
+				'description'       => __( 'Maximum product price.', 'codarx-products' ),
+				'type'              => 'number',
+				'sanitize_callback' => array( $this, 'sanitize_price_param' ),
+			),
 			'orderby'   => array(
-				'description' => __( 'Sort field. Supported: price.', 'codarx-products' ),
+				'description' => __( 'Sort field. Supported: date, price.', 'codarx-products' ),
 				'type'        => 'string',
-				'enum'        => array( 'price' ),
+				'enum'        => array( 'date', 'price' ),
+				'default'     => 'date',
 			),
 			'order'     => array(
 				'description' => __( 'Sort direction when orderby is set.', 'codarx-products' ),
 				'type'        => 'string',
 				'enum'        => array( 'asc', 'desc', 'ASC', 'DESC' ),
-				'default'     => 'asc',
+				'default'     => 'desc',
 			),
 		);
 	}
@@ -167,6 +178,22 @@ class Codarx_Products_REST_API implements Codarx_Products_Registrable {
 				'sanitize_callback' => array( $this->sanitize, 'stock' ),
 			)
 		);
+	}
+
+	/**
+	 * @param mixed           $value   Raw value.
+	 * @param WP_REST_Request $request Request object.
+	 * @param string          $param   Parameter name.
+	 * @return float|null
+	 */
+	public function sanitize_price_param( $value, $request = null, $param = null ) {
+		unset( $request, $param );
+
+		if ( '' === $value || null === $value ) {
+			return null;
+		}
+
+		return is_numeric( $value ) ? (float) $value : null;
 	}
 
 	/**
