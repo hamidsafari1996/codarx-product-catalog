@@ -24,14 +24,29 @@ class Codarx_Products_Product_Transformer {
 		$available   = is_numeric( $stock ) ? ( (int) $stock ) > 0 : false;
 
 		return array(
-			'id'        => (int) $post->ID,
-			'title'     => get_the_title( $post ),
-			'slug'      => $post->post_name,
-			'price'     => $this->format_price( $price_value ),
-			'available' => $available,
-			'image'     => $this->transform_image( $post->ID ),
-			'category'  => $this->transform_category( $post->ID ),
+			'id'          => (int) $post->ID,
+			'title'       => get_the_title( $post ),
+			'slug'        => $post->post_name,
+			'description' => $this->transform_description( $post ),
+			'price'       => $this->format_price( $price_value ),
+			'available'   => $available,
+			'image'       => $this->transform_image( $post->ID ),
+			'category'    => $this->transform_category( $post->ID ),
 		);
+	}
+
+	/**
+	 * @param WP_Post $post Product post.
+	 * @return string Rendered product content/description.
+	 */
+	private function transform_description( WP_Post $post ) {
+		$content = $post->post_content;
+
+		if ( '' === trim( $content ) ) {
+			return '';
+		}
+
+		return apply_filters( 'the_content', $content );
 	}
 
 	/**
