@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CATALOG_PATH } from "@/lib/catalog-params";
 
 export default function NotFound() {
   return (
@@ -8,7 +9,7 @@ export default function NotFound() {
         The product you are looking for does not exist or is no longer available.
       </p>
       <Link
-        href="/"
+        href={CATALOG_PATH}
         className="inline-flex rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-hover"
       >
         Back to catalog

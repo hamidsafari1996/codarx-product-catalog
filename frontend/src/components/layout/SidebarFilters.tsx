@@ -1,6 +1,7 @@
 "use client";
 
 import type { CatalogSearchParams } from "@/lib/catalog-params";
+import { CATALOG_PATH } from "@/lib/catalog-params";
 import ClientOnly from "@/components/forms/ClientOnly";
 import HydrationSafeInput from "@/components/forms/HydrationSafeInput";
 import PriceRangeFilter from "@/components/filters/PriceRangeFilter";
@@ -52,7 +53,7 @@ function SidebarFiltersSkeleton() {
 function SidebarFiltersForm({ filters }: SidebarFiltersProps) {
   return (
     <form
-      action="/"
+      action={CATALOG_PATH}
       method="get"
       className="rounded-2xl border border-border bg-surface p-5 shadow-sm"
     >
@@ -122,7 +123,7 @@ function SidebarFiltersForm({ filters }: SidebarFiltersProps) {
       </button>
 
       <a
-        href="/"
+        href={CATALOG_PATH}
         className="mt-3 block text-center text-sm text-muted transition-colors hover:text-brand"
       >
         Reset Filters

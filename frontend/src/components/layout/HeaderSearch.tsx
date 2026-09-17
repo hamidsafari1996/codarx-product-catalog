@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import ClientOnly from "@/components/forms/ClientOnly";
 import HydrationSafeInput from "@/components/forms/HydrationSafeInput";
+import { CATALOG_PATH } from "@/lib/catalog-params";
 
 function HeaderSearchSkeleton() {
   return (
@@ -18,7 +19,7 @@ function HeaderSearchForm() {
   const defaultValue = searchParams.get("search") ?? "";
 
   return (
-    <form action="/" method="get" className="mx-auto w-full max-w-2xl">
+    <form action={CATALOG_PATH} method="get" className="mx-auto w-full max-w-2xl">
       <label htmlFor="product-search" className="sr-only">
         Search products
       </label>

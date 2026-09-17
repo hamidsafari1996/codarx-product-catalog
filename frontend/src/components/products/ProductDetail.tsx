@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Product } from "@/types/product";
 import ProductThumbnail from "@/components/products/ProductThumbnail";
+import { CATALOG_PATH } from "@/lib/catalog-params";
 import { formatPrice, stripHtml } from "@/lib/format";
 
 type ProductDetailProps = {
@@ -91,7 +92,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         <ol className="flex flex-wrap items-center gap-2 text-sm text-muted">
           <li className="inline-flex items-center gap-1.5">
             <HomeIcon />
-            <Link href="/" className="transition-colors hover:text-brand">
+            <Link href={CATALOG_PATH} className="transition-colors hover:text-brand">
               Home
             </Link>
           </li>
@@ -100,7 +101,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               <li aria-hidden="true">&gt;</li>
               <li>
                 <Link
-                  href={`/?category=${encodeURIComponent(product.category.slug)}`}
+                  href={`${CATALOG_PATH}?category=${encodeURIComponent(product.category.slug)}`}
                   className="transition-colors hover:text-brand"
                 >
                   {product.category.name}

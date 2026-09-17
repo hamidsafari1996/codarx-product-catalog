@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import HeaderSearch from "@/components/layout/HeaderSearch";
+import { CATALOG_PATH } from "@/lib/catalog-params";
 
 function NexusLogo() {
   return (
@@ -27,7 +28,7 @@ export default function Header() {
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center gap-4 px-4 sm:gap-6 sm:px-6 lg:px-8">
         <div className="shrink-0">
           <Link
-            href="/"
+            href={CATALOG_PATH}
             className="flex items-center gap-2.5 text-brand transition-opacity hover:opacity-80"
           >
             <NexusLogo />

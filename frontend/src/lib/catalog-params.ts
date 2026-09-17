@@ -1,5 +1,7 @@
 import type { ProductsQuery } from "@/lib/api/products";
 
+export const CATALOG_PATH = "/products";
+
 export type CatalogSearchParams = {
   page?: string;
   search?: string;
@@ -65,5 +67,5 @@ export function buildCatalogHref(
   }
 
   const qs = query.toString();
-  return qs ? `/?${qs}` : "/";
+  return qs ? `${CATALOG_PATH}?${qs}` : CATALOG_PATH;
 }
