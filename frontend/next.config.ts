@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
         port: "8080",
         pathname: "/wp-content/uploads/**",
       },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+        port: "8080",
+        pathname: "/wp-content/uploads/**",
+      },
     ],
   },
 };

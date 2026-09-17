@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Suspense } from "react";
+import HeaderSearch from "@/components/layout/HeaderSearch";
 
 function NexusLogo() {
   return (
@@ -14,34 +16,6 @@ function NexusLogo() {
       <path
         d="M8 20V8h3.1l5.2 7.4V8H20v12h-3.1l-5.2-7.4V20H8Z"
         fill="#ffffff"
-      />
-    </svg>
-  );
-}
-
-function SearchIcon() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      <path
-        d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M21 21l-4.3-4.3"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
       />
     </svg>
   );
@@ -64,23 +38,13 @@ export default function Header() {
         </div>
 
         <div className="min-w-0 flex-1">
-          <form action="/" method="get" className="mx-auto w-full max-w-2xl">
-            <label htmlFor="product-search" className="sr-only">
-              Search products
-            </label>
-            <div className="flex items-center gap-2.5 rounded-full bg-muted-bg px-4 py-2.5">
-              <span className="text-muted">
-                <SearchIcon />
-              </span>
-              <input
-                id="product-search"
-                name="search"
-                type="search"
-                placeholder="Search products..."
-                className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted"
-              />
-            </div>
-          </form>
+          <Suspense
+            fallback={
+              <div className="mx-auto h-11 w-full max-w-2xl rounded-full bg-muted-bg" />
+            }
+          >
+            <HeaderSearch />
+          </Suspense>
         </div>
 
         <div className="shrink-0">

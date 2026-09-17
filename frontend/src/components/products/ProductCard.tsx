@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types/product";
 import { excerpt, formatPrice, productSku } from "@/lib/format";
+import ProductThumbnail from "@/components/products/ProductThumbnail";
 
 type ProductCardProps = {
   product: Product;
@@ -15,13 +15,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     <article className="flex flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
       <div className="relative aspect-[4/3] bg-muted-bg">
         {imageUrl ? (
-          <Image
-            src={imageUrl}
-            alt={imageAlt}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 40vw"
-          />
+          <ProductThumbnail src={imageUrl} alt={imageAlt} />
         ) : (
           <div className="flex h-full items-center justify-center text-sm text-muted">
             No image
