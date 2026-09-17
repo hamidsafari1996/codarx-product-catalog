@@ -30,12 +30,24 @@ class Codarx_Products_Sanitize {
 	}
 
 	/**
-	 * @param mixed $value Raw stock value.
-	 * @return int Non-negative integer stock count.
+	 * @param mixed $value Raw stock status (in_stock|out_of_stock|1|0|true|false).
+	 * @return int 1 when in stock, otherwise 0.
 	 */
 	public function stock( $value ) {
-		$stock = is_numeric( $value ) ? (int) $value : 0;
+		if ( is_bool( $value ) ) {
+			return $value ? 1 : 0;
+		}
 
-		return max( 0, $stock );
+		if ( is_numeric( $value ) ) {
+			return ( (int) $value ) > 0 ? 1 : 0;
+		}
+
+		$status = strtolower( trim( (string) $value ) );
+
+		if ( in_array( $status, array( 'in_stock', 'instock', 'true', 'yes', '1' ), true ) ) {
+			return 1;
+		}
+
+		return 0;
 	}
 }

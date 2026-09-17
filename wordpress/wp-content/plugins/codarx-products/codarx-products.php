@@ -36,6 +36,8 @@ require_once CODARX_PRODUCTS_PATH . 'includes/class-sanitize.php';
 require_once CODARX_PRODUCTS_PATH . 'includes/class-cpt.php';
 require_once CODARX_PRODUCTS_PATH . 'includes/class-taxonomy.php';
 require_once CODARX_PRODUCTS_PATH . 'includes/class-meta-boxes.php';
+require_once CODARX_PRODUCTS_PATH . 'includes/class-product-query.php';
+require_once CODARX_PRODUCTS_PATH . 'includes/class-product-transformer.php';
 require_once CODARX_PRODUCTS_PATH . 'includes/class-rest-api.php';
 
 /**
@@ -73,13 +75,15 @@ final class Codarx_Products_Plugin {
 	 * @return void
 	 */
 	private function load_components() {
-		$sanitize = new Codarx_Products_Sanitize();
+		$sanitize    = new Codarx_Products_Sanitize();
+		$query       = new Codarx_Products_Product_Query();
+		$transformer = new Codarx_Products_Product_Transformer();
 
 		$this->components = array(
 			new Codarx_Products_CPT(),
 			new Codarx_Products_Taxonomy(),
 			new Codarx_Products_Meta_Boxes( $sanitize ),
-			new Codarx_Products_REST_API( $sanitize ),
+			new Codarx_Products_REST_API( $sanitize, $query, $transformer ),
 		);
 	}
 

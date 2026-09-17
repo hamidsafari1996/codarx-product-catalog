@@ -60,13 +60,11 @@ class Codarx_Products_Meta_Boxes implements Codarx_Products_Registrable {
 			$price = '0.00';
 		}
 
-		if ( '' === $stock ) {
-			$stock = 0;
-		}
+		$in_stock = '' === $stock ? true : ( (int) $stock ) > 0;
 		?>
 		<p>
 			<label for="codarx_product_price">
-				<strong><? esc_html_e( 'Price', 'codarx-products' ); ?></strong>
+				<strong><?php esc_html_e( 'Price', 'codarx-products' ); ?></strong>
 			</label><br />
 			<input
 				type="number"
@@ -78,20 +76,29 @@ class Codarx_Products_Meta_Boxes implements Codarx_Products_Registrable {
 				class="widefat"
 			/>
 		</p>
-		<p>
-			<label for="codarx_product_stock">
-				<strong><? esc_html_e( 'Stock', 'codarx-products' ); ?></strong>
-			</label><br />
-			<input
-				type="number"
-				id="codarx_product_stock"
-				name="codarx_product_stock"
-				value="<?php echo esc_attr( (string) $stock ); ?>"
-				min="0"
-				step="1"
-				class="widefat"
-			/>
-		</p>
+		<fieldset>
+			<legend>
+				<strong><?php esc_html_e( 'Stock', 'codarx-products' ); ?></strong>
+			</legend>
+			<label style="display:block;margin:6px 0;">
+				<input
+					type="radio"
+					name="codarx_product_stock"
+					value="in_stock"
+					<?php checked( $in_stock ); ?>
+				/>
+				<?php esc_html_e( 'In Stock', 'codarx-products' ); ?>
+			</label>
+			<label style="display:block;margin:6px 0;">
+				<input
+					type="radio"
+					name="codarx_product_stock"
+					value="out_of_stock"
+					<?php checked( ! $in_stock ); ?>
+				/>
+				<?php esc_html_e( 'Out of Stock', 'codarx-products' ); ?>
+			</label>
+		</fieldset>
 		<?php
 	}
 
