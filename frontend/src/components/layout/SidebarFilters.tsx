@@ -3,6 +3,7 @@
 import type { CatalogSearchParams } from "@/lib/catalog-params";
 import ClientOnly from "@/components/forms/ClientOnly";
 import HydrationSafeInput from "@/components/forms/HydrationSafeInput";
+import PriceRangeFilter from "@/components/filters/PriceRangeFilter";
 
 type SidebarFiltersProps = {
   filters: CatalogSearchParams;
@@ -76,47 +77,10 @@ function SidebarFiltersForm({ filters }: SidebarFiltersProps) {
         <h3 className="mb-3 text-sm font-semibold text-foreground">
           Filter by Price
         </h3>
-        <div className="mb-3 grid grid-cols-2 gap-2">
-          <label className="sr-only" htmlFor="min_price">
-            Minimum price
-          </label>
-          <div className="flex items-center gap-1 rounded-xl bg-muted-bg px-3 py-2.5 text-sm text-muted">
-            <span>$</span>
-            <HydrationSafeInput
-              id="min_price"
-              name="min_price"
-              type="number"
-              min="0"
-              step="1"
-              placeholder="200"
-              defaultValue={filters.min_price ?? ""}
-              className="w-full bg-transparent text-foreground outline-none placeholder:text-muted"
-            />
-          </div>
-          <label className="sr-only" htmlFor="max_price">
-            Maximum price
-          </label>
-          <div className="flex items-center gap-1 rounded-xl bg-muted-bg px-3 py-2.5 text-sm text-muted">
-            <span>$</span>
-            <HydrationSafeInput
-              id="max_price"
-              name="max_price"
-              type="number"
-              min="0"
-              step="1"
-              placeholder="3500"
-              defaultValue={filters.max_price ?? ""}
-              className="w-full bg-transparent text-foreground outline-none placeholder:text-muted"
-            />
-          </div>
-        </div>
-        <div className="px-1">
-          <div className="relative h-1.5 rounded-full bg-border">
-            <div className="absolute inset-y-0 left-[8%] right-[12%] rounded-full bg-brand" />
-            <span className="absolute top-1/2 left-[8%] size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-brand bg-white" />
-            <span className="absolute top-1/2 right-[12%] size-3.5 translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-brand bg-white" />
-          </div>
-        </div>
+        <PriceRangeFilter
+          initialMin={filters.min_price}
+          initialMax={filters.max_price}
+        />
       </div>
 
       <fieldset className="mb-6">

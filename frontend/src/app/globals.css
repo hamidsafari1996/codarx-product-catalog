@@ -35,3 +35,49 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), sans-serif;
 }
+
+.price-range-thumb {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  transform: translateY(-50%);
+  pointer-events: none;
+  appearance: none;
+  background: transparent;
+  height: 1.5rem;
+}
+
+.price-range-thumb::-webkit-slider-runnable-track {
+  appearance: none;
+  background: transparent;
+  height: 1.5rem;
+}
+
+.price-range-thumb::-moz-range-track {
+  background: transparent;
+  height: 1.5rem;
+}
+
+.price-range-thumb::-webkit-slider-thumb {
+  appearance: none;
+  pointer-events: auto;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 9999px;
+  border: 2px solid var(--brand);
+  background: #ffffff;
+  cursor: pointer;
+  margin-top: -0.3125rem;
+}
+
+.price-range-thumb::-moz-range-thumb {
+  pointer-events: auto;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 9999px;
+  border: 2px solid var(--brand);
+  background: #ffffff;
+  cursor: pointer;
+}
