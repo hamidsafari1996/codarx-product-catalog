@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Product } from "@/types/product";
 import { excerpt, formatPrice, productSku } from "@/lib/format";
-import ProductThumbnail from "@/components/products/ProductThumbnail";
+import ProductThumbnail from "./ProductThumbnail";
 
 type ProductCardProps = {
   product: Product;
