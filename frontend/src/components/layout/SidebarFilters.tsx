@@ -1,6 +1,7 @@
 "use client";
 
 import type { CatalogSearchParams } from "@/lib/catalog-params";
+import ClientOnly from "@/components/forms/ClientOnly";
 import HydrationSafeInput from "@/components/forms/HydrationSafeInput";
 
 type SidebarFiltersProps = {
@@ -27,7 +28,27 @@ function FiltersIcon() {
   );
 }
 
-export default function SidebarFilters({ filters }: SidebarFiltersProps) {
+function SidebarFiltersSkeleton() {
+  return (
+    <div
+      className="rounded-2xl border border-border bg-surface p-5 shadow-sm"
+      aria-hidden="true"
+    >
+      <div className="mb-6 h-6 w-24 rounded bg-muted-bg" />
+      <div className="mb-6 space-y-3">
+        <div className="h-4 w-32 rounded bg-muted-bg" />
+        <div className="grid grid-cols-2 gap-2">
+          <div className="h-10 rounded-xl bg-muted-bg" />
+          <div className="h-10 rounded-xl bg-muted-bg" />
+        </div>
+      </div>
+      <div className="mb-6 h-24 rounded bg-muted-bg" />
+      <div className="h-11 rounded-xl bg-muted-bg" />
+    </div>
+  );
+}
+
+function SidebarFiltersForm({ filters }: SidebarFiltersProps) {
   return (
     <form
       action="/"
@@ -35,13 +56,13 @@ export default function SidebarFilters({ filters }: SidebarFiltersProps) {
       className="rounded-2xl border border-border bg-surface p-5 shadow-sm"
     >
       {filters.search ? (
-        <input type="hidden" name="search" value={filters.search} />
+        <HydrationSafeInput type="hidden" name="search" value={filters.search} />
       ) : null}
       {filters.orderby ? (
-        <input type="hidden" name="orderby" value={filters.orderby} />
+        <HydrationSafeInput type="hidden" name="orderby" value={filters.orderby} />
       ) : null}
       {filters.order ? (
-        <input type="hidden" name="order" value={filters.order} />
+        <HydrationSafeInput type="hidden" name="order" value={filters.order} />
       ) : null}
 
       <div className="mb-6 flex items-center justify-between">
@@ -143,5 +164,13 @@ export default function SidebarFilters({ filters }: SidebarFiltersProps) {
         Reset Filters
       </a>
     </form>
+  );
+}
+
+export default function SidebarFilters({ filters }: SidebarFiltersProps) {
+  return (
+    <ClientOnly fallback={<SidebarFiltersSkeleton />}>
+      <SidebarFiltersForm filters={filters} />
+    </ClientOnly>
   );
 }

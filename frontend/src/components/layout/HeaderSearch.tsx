@@ -1,9 +1,19 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import ClientOnly from "@/components/forms/ClientOnly";
 import HydrationSafeInput from "@/components/forms/HydrationSafeInput";
 
-export default function HeaderSearch() {
+function HeaderSearchSkeleton() {
+  return (
+    <div
+      className="mx-auto h-11 w-full max-w-2xl rounded-full bg-muted-bg"
+      aria-hidden="true"
+    />
+  );
+}
+
+function HeaderSearchForm() {
   const searchParams = useSearchParams();
   const defaultValue = searchParams.get("search") ?? "";
 
@@ -47,5 +57,13 @@ export default function HeaderSearch() {
         />
       </div>
     </form>
+  );
+}
+
+export default function HeaderSearch() {
+  return (
+    <ClientOnly fallback={<HeaderSearchSkeleton />}>
+      <HeaderSearchForm />
+    </ClientOnly>
   );
 }
