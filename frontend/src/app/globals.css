@@ -12,6 +12,8 @@
   --accent-teal: #0d9488;
   --stock: #16a34a;
   --stock-bg: #e8f8ef;
+  --category: #4338ca;
+  --category-bg: #ede9fe;
 }
 
 @theme inline {
@@ -26,6 +28,8 @@
   --color-accent-teal: var(--accent-teal);
   --color-stock: var(--stock);
   --color-stock-bg: var(--stock-bg);
+  --color-category: var(--category);
+  --color-category-bg: var(--category-bg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }

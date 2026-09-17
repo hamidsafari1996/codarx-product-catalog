@@ -1,4 +1,4 @@
-import type { ProductsResponse } from "@/types/product";
+import type { Product, ProductsResponse } from "@/types/product";
 
 export type ProductsQuery = {
   page?: number;
@@ -54,4 +54,24 @@ export async function getProducts(
   }
 
   return response.json() as Promise<ProductsResponse>;
+}
+
+export async function getProductBySlug(slug: string): Promise<Product | null> {
+  const url = new URL(
+    `${getApiBaseUrl()}/wp-json/codarx/v1/products/${encodeURIComponent(slug)}`,
+  );
+
+  const response = await fetch(url.toString(), {
+    next: { revalidate: 30 },
+  });
+
+  if (response.status === 404) {
+    return null;
+  }
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch product (${response.status})`);
+  }
+
+  return response.json() as Promise<Product>;
 }

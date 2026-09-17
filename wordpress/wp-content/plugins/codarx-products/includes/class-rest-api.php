@@ -67,6 +67,24 @@ class Codarx_Products_REST_API implements Codarx_Products_Registrable {
 				'args'                => $this->get_collection_args(),
 			)
 		);
+
+		register_rest_route(
+			self::NAMESPACE,
+			self::ROUTE . '/(?P<slug>[a-zA-Z0-9-]+)',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_product' ),
+				'permission_callback' => '__return_true',
+				'args'                => array(
+					'slug' => array(
+						'description'       => __( 'Product slug.', 'codarx-products' ),
+						'type'              => 'string',
+						'required'          => true,
+						'sanitize_callback' => 'sanitize_title',
+					),
+				),
+			)
+		);
 	}
 
 	/**
@@ -93,6 +111,34 @@ class Codarx_Products_REST_API implements Codarx_Products_Registrable {
 				),
 			)
 		);
+	}
+
+	/**
+	 * @param WP_REST_Request $request Incoming request.
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function get_product( WP_REST_Request $request ) {
+		$slug = sanitize_title( (string) $request['slug'] );
+
+		$posts = get_posts(
+			array(
+				'name'             => $slug,
+				'post_type'        => Codarx_Products_CPT::POST_TYPE,
+				'post_status'      => 'publish',
+				'posts_per_page'   => 1,
+				'suppress_filters' => false,
+			)
+		);
+
+		if ( empty( $posts ) ) {
+			return new WP_Error(
+				'codarx_product_not_found',
+				__( 'Product not found.', 'codarx-products' ),
+				array( 'status' => 404 )
+			);
+		}
+
+		return rest_ensure_response( $this->transformer->transform( $posts[0] ) );
 	}
 
 	/**
