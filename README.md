@@ -159,13 +159,18 @@ To also remove the MySQL volume:
 docker compose down -v
 ```
 
-## Troubleshooting
+## Plugin PHPUnit tests
 
-- **API 404 / theme “nothing found” page**  
-  Save permalinks again (**Settings → Permalinks → Save**). Prefer **Post name** over **Plain**.
+From the repo root (Docker WordPress + MySQL must be running):
 
-- **Frontend shows “Catalog temporarily unavailable”**  
-  Confirm Docker is running (`docker compose ps`) and WordPress responds at http://localhost:8080. Check `frontend/.env.local`.
+```bash
+# Create the isolated test database once
+docker exec -i codarx-db mysql -uroot -proot_pass_123 -e "CREATE DATABASE IF NOT EXISTS codarx_test; GRANT ALL PRIVILEGES ON codarx_test.* TO 'wp'@'%'; FLUSH PRIVILEGES;"
 
-- **Images not loading**  
-  Ensure product featured images were uploaded in WordPress and that `NEXT_PUBLIC_WP_API_URL` matches your WordPress origin (`http://localhost:8080`).
+# Install Composer deps for the plugin (on the host; vendor is mounted into the container)
+cd wordpress/wp-content/plugins/codarx-products
+composer install
+
+# Run tests inside the WordPress container
+docker exec -w /var/www/html/wp-content/plugins/codarx-products -e WORDPRESS_DB_USER=wp -e WORDPRESS_DB_PASSWORD=wp_pass_123 -e WORDPRESS_DB_HOST=db codarx-wp vendor/bin/phpunit
+```

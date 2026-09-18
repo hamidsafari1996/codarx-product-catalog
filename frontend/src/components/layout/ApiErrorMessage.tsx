@@ -37,7 +37,7 @@ function AlertIcon() {
 
 export default function ApiErrorMessage({
   title = "Catalog temporarily unavailable",
-  message = "We could not reach the product API. Make sure WordPress is running at the configured API URL, then try again.",
+  message = "We could not load the catalog right now. Please try again in a moment.",
   showCatalogLink = false,
   onRetry,
 }: ApiErrorMessageProps) {

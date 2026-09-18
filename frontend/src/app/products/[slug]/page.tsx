@@ -50,7 +50,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <div className="mx-auto flex w-full max-w-7xl flex-col px-4 py-8 sm:px-6 lg:px-8">
         <ApiErrorMessage
           title="Unable to load this product"
-          message="The product catalog API is unavailable. Make sure WordPress is running, then try again."
+          message="We couldn't load this product right now. Please try again in a moment."
           showCatalogLink
         />
       </div>

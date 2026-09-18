@@ -25,12 +25,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const query = parseCatalogSearchParams(params);
 
   let categories: ProductCategory[] = [];
-  let categoriesFailed = false;
 
   try {
     categories = await getCategories();
   } catch {
-    categoriesFailed = true;
     categories = [];
   }
 
@@ -52,11 +50,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       <div className="mx-auto flex w-full max-w-7xl flex-col px-4 py-8 sm:px-6 lg:px-8">
         <ApiErrorMessage
           title="Something went wrong"
-          message={
-            categoriesFailed
-              ? "We couldn't load the products right now. Please try again in a moment."
-              : "We could not load products from the catalog API. Check that WordPress is running, then try again."
-          }
+          message="We couldn't load the products right now. Please try again in a moment."
         />
       </div>
     );
