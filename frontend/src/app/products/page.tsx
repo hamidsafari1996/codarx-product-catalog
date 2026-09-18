@@ -25,9 +25,12 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const query = parseCatalogSearchParams(params);
 
   let categories: ProductCategory[] = [];
+  let categoriesFailed = false;
+
   try {
     categories = await getCategories();
   } catch {
+    categoriesFailed = true;
     categories = [];
   }
 
@@ -46,9 +49,15 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     );
   } catch {
     return (
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:flex-row lg:items-start lg:px-8">
-        <Sidebar filters={params} categories={categories} />
-        <ApiErrorMessage />
+      <div className="mx-auto flex w-full max-w-7xl flex-col px-4 py-8 sm:px-6 lg:px-8">
+        <ApiErrorMessage
+          title="Unable to load products"
+          message={
+            categoriesFailed
+              ? "The WordPress product API appears to be offline or unreachable. Start the WordPress container and refresh this page."
+              : "We could not load products from the catalog API. Check that WordPress is running, then try again."
+          }
+        />
       </div>
     );
   }

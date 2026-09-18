@@ -53,9 +53,15 @@ function buildProductsUrl(query: ProductsQuery = {}) {
 export async function getProducts(
   query: ProductsQuery = {},
 ): Promise<ProductsResponse> {
-  const response = await fetch(buildProductsUrl(query), {
-    cache: "no-store",
-  });
+  let response: Response;
+
+  try {
+    response = await fetch(buildProductsUrl(query), {
+      cache: "no-store",
+    });
+  } catch {
+    throw new Error("Product API is unreachable");
+  }
 
   if (!response.ok) {
     throw new Error(`Failed to fetch products (${response.status})`);
@@ -67,9 +73,15 @@ export async function getProducts(
 export async function getCategories(): Promise<ProductCategory[]> {
   const url = new URL(`${getApiBaseUrl()}/wp-json/codarx/v1/categories`);
 
-  const response = await fetch(url.toString(), {
-    cache: "no-store",
-  });
+  let response: Response;
+
+  try {
+    response = await fetch(url.toString(), {
+      cache: "no-store",
+    });
+  } catch {
+    throw new Error("Categories API is unreachable");
+  }
 
   if (!response.ok) {
     throw new Error(`Failed to fetch categories (${response.status})`);
@@ -84,9 +96,15 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
     `${getApiBaseUrl()}/wp-json/codarx/v1/products/${encodeURIComponent(slug)}`,
   );
 
-  const response = await fetch(url.toString(), {
-    next: { revalidate: 30 },
-  });
+  let response: Response;
+
+  try {
+    response = await fetch(url.toString(), {
+      cache: "no-store",
+    });
+  } catch {
+    throw new Error("Product API is unreachable");
+  }
 
   if (response.status === 404) {
     return null;

@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ApiErrorMessage from "@/components/layout/ApiErrorMessage";
 import ProductDetail from "@/components/products/ProductDetail";
-import { getProducts, getProductBySlug } from "@/lib/api/products";
-import { CATALOG_PATH } from "@/lib/catalog-params";
+import { getProductBySlug } from "@/lib/api/products";
 import { stripHtml } from "@/lib/format";
 
 type ProductPageProps = {
@@ -48,11 +47,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
     return <ProductDetail product={product} />;
   } catch {
     return (
-      <ApiErrorMessage
-        title="Unable to load this product"
-        message="The product catalog API is unavailable. Check that WordPress is running and try again."
-        retryHref={`${CATALOG_PATH}/${slug}`}
-      />
+      <div className="mx-auto flex w-full max-w-7xl flex-col px-4 py-8 sm:px-6 lg:px-8">
+        <ApiErrorMessage
+          title="Unable to load this product"
+          message="The product catalog API is unavailable. Make sure WordPress is running, then try again."
+          showCatalogLink
+        />
+      </div>
     );
   }
 }
