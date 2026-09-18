@@ -51,10 +51,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     return (
       <div className="mx-auto flex w-full max-w-7xl flex-col px-4 py-8 sm:px-6 lg:px-8">
         <ApiErrorMessage
-          title="Unable to load products"
+          title="Something went wrong"
           message={
             categoriesFailed
-              ? "The WordPress product API appears to be offline or unreachable. Start the WordPress container and refresh this page."
+              ? "We couldn't load the products right now. Please try again in a moment."
               : "We could not load products from the catalog API. Check that WordPress is running, then try again."
           }
         />
