@@ -31,11 +31,16 @@ export function parseCatalogSearchParams(
   const order =
     params.order === "asc" || params.order === "desc" ? params.order : "desc";
 
+  const category =
+    params.category?.trim() && params.category !== "all"
+      ? params.category.trim()
+      : undefined;
+
   return {
     page: Number.isFinite(page) && page > 0 ? page : 1,
     per_page: 4,
     search: params.search?.trim() || undefined,
-    category: params.category?.trim() || undefined,
+    category,
     available,
     min_price:
       typeof minPrice === "number" && Number.isFinite(minPrice)
@@ -58,7 +63,10 @@ export function buildCatalogHref(
   const query = new URLSearchParams();
 
   for (const [key, value] of Object.entries(next)) {
-    if (key === "available" && (value === "all" || value === "")) {
+    if (
+      (key === "available" || key === "category") &&
+      (value === "all" || value === "")
+    ) {
       continue;
     }
     if (value !== undefined && value !== "") {

@@ -2,12 +2,14 @@
 
 import type { CatalogSearchParams } from "@/lib/catalog-params";
 import { CATALOG_PATH } from "@/lib/catalog-params";
+import type { ProductCategory } from "@/types/product";
 import ClientOnly from "@/components/forms/ClientOnly";
 import HydrationSafeInput from "@/components/forms/HydrationSafeInput";
 import PriceRangeFilter from "@/components/filters/PriceRangeFilter";
 
 type SidebarFiltersProps = {
   filters: CatalogSearchParams;
+  categories: ProductCategory[];
 };
 
 function FiltersIcon() {
@@ -45,12 +47,15 @@ function SidebarFiltersSkeleton() {
         </div>
       </div>
       <div className="mb-6 h-24 rounded bg-muted-bg" />
+      <div className="mb-6 h-28 rounded bg-muted-bg" />
       <div className="h-11 rounded-xl bg-muted-bg" />
     </div>
   );
 }
 
-function SidebarFiltersForm({ filters }: SidebarFiltersProps) {
+function SidebarFiltersForm({ filters, categories }: SidebarFiltersProps) {
+  const selectedCategory = filters.category ?? "all";
+
   return (
     <form
       action={CATALOG_PATH}
@@ -83,6 +88,39 @@ function SidebarFiltersForm({ filters }: SidebarFiltersProps) {
           initialMax={filters.max_price}
         />
       </div>
+
+      <fieldset className="mb-6">
+        <legend className="mb-3 text-sm font-semibold text-foreground">
+          Category
+        </legend>
+        <div className="max-h-48 space-y-3 overflow-y-auto pr-1">
+          <label className="flex cursor-pointer items-center gap-2.5 text-sm text-foreground">
+            <HydrationSafeInput
+              type="radio"
+              name="category"
+              value="all"
+              defaultChecked={!filters.category || filters.category === "all"}
+              className="size-4 accent-brand"
+            />
+            All Categories
+          </label>
+          {categories.map((category) => (
+            <label
+              key={category.id}
+              className="flex cursor-pointer items-center gap-2.5 text-sm text-foreground"
+            >
+              <HydrationSafeInput
+                type="radio"
+                name="category"
+                value={category.slug}
+                defaultChecked={selectedCategory === category.slug}
+                className="size-4 accent-brand"
+              />
+              {category.name}
+            </label>
+          ))}
+        </div>
+      </fieldset>
 
       <fieldset className="mb-6">
         <legend className="mb-3 text-sm font-semibold text-foreground">
@@ -132,10 +170,13 @@ function SidebarFiltersForm({ filters }: SidebarFiltersProps) {
   );
 }
 
-export default function SidebarFilters({ filters }: SidebarFiltersProps) {
+export default function SidebarFilters({
+  filters,
+  categories,
+}: SidebarFiltersProps) {
   return (
     <ClientOnly fallback={<SidebarFiltersSkeleton />}>
-      <SidebarFiltersForm filters={filters} />
+      <SidebarFiltersForm filters={filters} categories={categories} />
     </ClientOnly>
   );
 }

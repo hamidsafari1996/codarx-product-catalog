@@ -12,8 +12,9 @@ defined( 'ABSPATH' ) || exit;
  */
 class Codarx_Products_REST_API implements Codarx_Products_Registrable {
 
-	public const NAMESPACE = 'codarx/v1';
-	public const ROUTE     = '/products';
+	public const NAMESPACE       = 'codarx/v1';
+	public const ROUTE           = '/products';
+	public const CATEGORIES_ROUTE = '/categories';
 
 	/**
 	 * @var Codarx_Products_Sanitize
@@ -85,6 +86,16 @@ class Codarx_Products_REST_API implements Codarx_Products_Registrable {
 				),
 			)
 		);
+
+		register_rest_route(
+			self::NAMESPACE,
+			self::CATEGORIES_ROUTE,
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_categories' ),
+				'permission_callback' => '__return_true',
+			)
+		);
 	}
 
 	/**
@@ -111,6 +122,39 @@ class Codarx_Products_REST_API implements Codarx_Products_Registrable {
 				),
 			)
 		);
+	}
+
+	/**
+	 * @param WP_REST_Request $request Incoming request.
+	 * @return WP_REST_Response
+	 */
+	public function get_categories( WP_REST_Request $request ) {
+		unset( $request );
+
+		$terms = get_terms(
+			array(
+				'taxonomy'   => Codarx_Products_Taxonomy::TAXONOMY,
+				'hide_empty' => false,
+				'orderby'    => 'name',
+				'order'      => 'ASC',
+			)
+		);
+
+		if ( is_wp_error( $terms ) ) {
+			return rest_ensure_response( array( 'items' => array() ) );
+		}
+
+		$items = array();
+
+		foreach ( $terms as $term ) {
+			$items[] = array(
+				'id'   => (int) $term->term_id,
+				'name' => $term->name,
+				'slug' => $term->slug,
+			);
+		}
+
+		return rest_ensure_response( array( 'items' => $items ) );
 	}
 
 	/**

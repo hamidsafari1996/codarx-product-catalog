@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Sidebar from "@/components/layout/Sidebar";
 import ApiErrorMessage from "@/components/layout/ApiErrorMessage";
 import ProductList from "@/components/products/ProductList";
-import { getProducts } from "@/lib/api/products";
+import { getCategories, getProducts } from "@/lib/api/products";
 import {
   parseCatalogSearchParams,
   type CatalogSearchParams,
 } from "@/lib/catalog-params";
+import type { ProductCategory } from "@/types/product";
 
 export const dynamic = "force-dynamic";
 
@@ -23,12 +24,19 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const params = await searchParams;
   const query = parseCatalogSearchParams(params);
 
+  let categories: ProductCategory[] = [];
+  try {
+    categories = await getCategories();
+  } catch {
+    categories = [];
+  }
+
   try {
     const products = await getProducts(query);
 
     return (
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:flex-row lg:items-start lg:px-8">
-        <Sidebar filters={params} />
+        <Sidebar filters={params} categories={categories} />
         <ProductList
           products={products.items}
           pagination={products.pagination}
@@ -39,7 +47,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   } catch {
     return (
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:flex-row lg:items-start lg:px-8">
-        <Sidebar filters={params} />
+        <Sidebar filters={params} categories={categories} />
         <ApiErrorMessage />
       </div>
     );
